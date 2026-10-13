@@ -1,0 +1,515 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Theme tokens ---------- */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0a0a0a;
+  --fg: #ffffff;
+  --muted: #c7c7c7;
+  --card: #1a1a1a;
+  --tile: #222222;
+  --line: #484848;
+  --portrait: #c7c7c7;
+  --primary: #73c2fb;
+  /* button fills */
+  --accent: #73c2fb;
+  /* text, icons, underlines */
+  --ink: #0a0a0a;
+  /* text on primary */
+  --shot-a: #2a2a2a;
+  --shot-b: #111111;
+  --shot-border: #000000;
+  --dock-bg: rgba(34, 34, 34, 0.6);
+  --dock-border: rgba(255, 255, 255, 0.12);
+  --dock-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --tip-bg: rgba(26, 26, 26, 0.92);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f4ef;
+  --fg: #0a0a0a;
+  --muted: #4a4a47;
+  --card: #e8e8e0;
+  --tile: #e2e2d8;
+  --line: #cbcbc0;
+  --portrait: hsl(60, 11%, 83%);
+  --accent: #327db5;
+  --shot-a: #ffffff;
+  --shot-b: #ecece4;
+  --shot-border: #cbcbc0;
+  --dock-bg: rgba(255, 255, 255, 0.65);
+  --dock-border: rgba(0, 0, 0, 0.1);
+  --dock-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --tip-bg: rgba(255, 255, 255, 0.95);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg font-body text-lg leading-normal text-fg;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* ---------- Dock ----------
+   The bar never changes size. useDockMagnify only sets two CSS variables:
+   --s  (icon scale)  and  --tx  (horizontal push so neighbours never touch). */
+/* 1st draft */
+/* 
+.dock-wrap {
+      position: fixed; left: 0; right: 0;
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+      display: flex; justify-content: center;
+      pointer-events: none; z-index: 1000;
+    }
+    .dock {
+      --size: 58px;
+      --gap: 14px;
+      pointer-events: auto;
+      box-sizing: border-box;
+      display: flex; align-items: flex-end; gap: var(--gap);
+      height: calc(var(--size) + 24px);   /* fixed bar height: icons rise above it */ /*
+      padding: 12px 30px;                 /* side room so pushed icons stay inside the bar */ /*
+      border-radius: 28px;
+      background: var(--dock-bg);
+      border: 1px solid var(--dock-border);
+      box-shadow: var(--dock-shadow);
+      -webkit-backdrop-filter: blur(22px) saturate(160%);
+      backdrop-filter: blur(22px) saturate(160%);
+      max-width: calc(100vw - 16px);
+    }
+    .dock-sep {
+      flex: none; width: 1px; height: calc(var(--size) * 0.7);
+      align-self: center; background: var(--dock-border);
+      transform: translateX(var(--tx, 0px));
+    }
+  
+    /* Slot: fixed size in the layout, only pushed sideways with a transform */ /**
+    .dock-item {
+      position: relative; flex: none; display: block;
+      width: var(--size); height: var(--size);
+      padding: 0; border: 0; background: none; font: inherit;
+      color: var(--accent); cursor: pointer;
+      -webkit-appearance: none; appearance: none;
+      transform: translateX(var(--tx, 0px));
+    }
+    /* Icon: scales up from its bottom edge, so it rises above the bar */ /*
+    .dock-icon {
+      position: absolute; inset: 0;
+      display: grid; place-items: center;
+      border-radius: 15px;
+      background: var(--tile);
+      border: 1px solid var(--dock-border);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
+      transform: scale(var(--s, 1));
+      transform-origin: 50% 100%;
+      transition: background 0.2s, color 0.2s;
+    }
+    .dock-icon svg { width: 50%; height: 50%; }
+    .dock-item:focus-visible { outline: none; }
+    .dock-item:focus-visible .dock-icon { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .dock-item.active .dock-icon { background: var(--primary); color: var(--ink); }
+  
+    /* Active dot, like the real Dock */ /*
+    .dock-item::after {
+      content: ""; position: absolute; left: 50%; bottom: -9px;
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--fg); transform: translateX(-50%);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .dock-item.active::after { opacity: 0.85; }
+  
+    /* Tooltip rides above the scaled icon */ /*
+    .dock-item::before {
+      content: attr(data-label);
+      position: absolute; left: 50%;
+      bottom: calc(var(--size) * var(--s, 1) + 14px);
+      transform: translateX(-50%);
+      padding: 5px 12px; border-radius: 8px;
+      font: 500 14px/1.4 Inter, system-ui, sans-serif; white-space: nowrap;
+      color: var(--fg); background: var(--tip-bg); border: 1px solid var(--line);
+      opacity: 0; pointer-events: none; transition: opacity 0.15s;
+    }
+    .dock-item:hover::before,
+    .dock-item:focus-visible::before { opacity: 1; }
+  
+    @media (max-width: 520px) {
+      .dock { --size: 40px; --gap: 6px; padding: 8px 12px; border-radius: 22px; height: calc(var(--size) + 16px); }
+      .dock-icon { border-radius: 11px; }
+      .dock-item::before { display: none; }
+    }
+  }
+  
+
+   /* improvised */
+@layer components {
+  .dock-wrap {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .dock {
+    --size: 58px;
+    --gap: 14px;
+    pointer-events: auto;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-end;
+    gap: var(--gap);
+    height: calc(var(--size) + 24px);
+    /* fixed bar height: icons rise above it */
+    padding: 12px 30px;
+    /* side room so pushed icons stay inside the bar */
+    border-radius: 28px;
+    background: var(--dock-bg);
+    border: 1px solid var(--dock-border);
+    box-shadow: var(--dock-shadow);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    backdrop-filter: blur(22px) saturate(160%);
+    max-width: calc(100vw - 16px);
+    touch-action: pan-y; /* vertical swipes still scroll the page; sideways drags magnify */
+    touch-action: none;
+    /* NEW: finger can slide along the dock */
+    -webkit-tap-highlight-color: transparent;
+    /* NEW */
+  }
+
+  .dock-sep {
+    flex: none;
+    width: 1px;
+    height: calc(var(--size) * 0.7);
+    align-self: center;
+    background: var(--dock-border);
+    transform: translateX(var(--tx, 0px));
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Slot: fixed size in the layout, only pushed sideways with a transform */
+  .dock-item {
+    position: relative;
+    flex: none;
+    display: block;
+    width: var(--size);
+    height: var(--size);
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: var(--accent);
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    transform: translateX(var(--tx, 0px));
+  }
+
+  /* Icon: scales up from its bottom edge, so it rises above the bar */
+  .dock-icon {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 15px;
+    background: var(--tile);
+    border: 1px solid var(--dock-border);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
+    transform: scale(var(--s, 1));
+    transform-origin: 50% 100%;
+    transition:
+      background 0.2s,
+      color 0.2s;
+  }
+
+  .dock-icon svg {
+    width: 50%;
+    height: 50%;
+  }
+
+  .dock-item:focus-visible {
+    outline: none;
+  }
+
+  .dock-item:focus-visible .dock-icon {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .dock-item.active .dock-icon {
+    background: var(--primary);
+    color: var(--ink);
+  }
+
+  /* Active dot, like the real Dock */
+  .dock-item::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -9px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--fg);
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .dock-item.active::after {
+    opacity: 0.85;
+  }
+
+  /* Tooltip rides above the scaled icon */
+  .dock-item::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 50%;
+    bottom: calc(var(--size) * var(--s, 1) + 14px);
+    transform: translateX(-50%);
+    padding: 5px 12px;
+    border-radius: 8px;
+    font:
+      500 14px/1.4 Inter,
+      system-ui,
+      sans-serif;
+    white-space: nowrap;
+    color: var(--fg);
+    background: var(--tip-bg);
+    border: 1px solid var(--line);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+  }
+
+  /* CHANGED: .is-hot is set by the hook (mouse, touch, pen) */
+  .dock-item.is-hot::before,
+  .dock-item:focus-visible::before {
+    opacity: 1;
+  }
+
+  /* NEW: keeps tooltips on desktop even when reduced motion disables the hook */
+  @media (hover: hover) {
+    .dock-item:hover::before {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .dock-wrap {
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 22px);
+    } /* lifted off the bottom edge */
+    .dock {
+      --size: clamp(
+        38px,
+        calc((100vw - 62px) / 7),
+        50px
+      ); /* as big as the phone allows */
+      width: calc(100vw - 20px);
+      max-width: 440px;
+      justify-content: space-between; /* identical gaps between every icon */
+      gap: 4px;
+      padding: 8px;
+      height: calc(var(--size) + 16px);
+      border-radius: 26px;
+    }
+    .dock-sep {
+      display: none;
+    }
+    /* .dock-icon {
+      border-radius: calc(var(--size) * 0.3);
+      transition:
+        transform 0.15s ease,
+        background 0.2s,
+        color 0.2s;
+    }
+    .dock-item:active .dock-icon {
+      transform: scale(0.92);
+    } tap feedback */
+
+    .dock-icon {
+      border-radius: calc(var(--size) * 0.3);
+    }
+
+    .dock-item::before {
+      display: none;
+    }
+    .dock-item::after {
+      bottom: -7px;
+    }
+  }
+
+  .dock-icon {
+    border-radius: 11px;
+  }
+
+  /* CHANGED: tooltip now shows on mobile, just smaller (display: none removed) */
+  .dock-item::before {
+    font-size: 12px;
+    padding: 4px 9px;
+    border-radius: 7px;
+    bottom: calc(var(--size) * var(--s, 1) + 10px);
+  }
+}
+
+/* improvised */
+/* ---------- Hero portrait animation ---------- */
+/* ---------- Neon portrait ---------- */
+@property --neon-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.portrait-in {
+  --neon-a: var(--accent);
+  --neon-b: color-mix(in srgb, var(--accent) 45%, #ff3df2);
+  /* second neon colour */
+}
+
+.neon-halo,
+.neon-glow,
+.neon-ring {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* 1. Soft ambient light that breathes */
+.neon-halo {
+  inset: -30px;
+  border-radius: 44px;
+  background: linear-gradient(135deg, var(--neon-a), var(--neon-b));
+  filter: blur(70px);
+  opacity: 1;
+  animation: neon-pulse 3.4s ease-in-out infinite alternate;
+}
+
+/* 2. Colourful glow that slowly rotates around the photo */
+.neon-glow {
+  inset: -2px;
+  border-radius: 18px;
+  background: conic-gradient(
+    from var(--neon-angle),
+    var(--neon-a),
+    var(--neon-b),
+    var(--neon-a),
+    var(--neon-b),
+    var(--neon-a)
+  );
+  filter: blur(6px);
+  opacity: 0.8;
+  transition:
+    opacity 0.8s ease,
+    filter 0.8s ease,
+    transform 0.8s ease;
+  animation:
+    neon-spin 7s linear infinite,
+    neon-in 1.4s ease-out 0.7s backwards;
+}
+
+/* 3. Thin edge with a light that runs around it */
+.neon-ring {
+  inset: -2px;
+  border-radius: 18px;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--neon-angle),
+    transparent 0%,
+    transparent 50%,
+    var(--neon-b) 75%,
+    var(--neon-a) 90%,
+    #fff 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  animation:
+    neon-spin 4.5s linear infinite,
+    neon-in 1.4s ease-out 0.9s backwards;
+}
+
+/* Hover: stronger, bigger glow */
+.portrait-in:hover .neon-glow {
+  opacity: 1;
+  filter: blur(30px);
+  transform: scale(0.95);
+}
+
+@keyframes neon-spin {
+  to {
+    --neon-angle: 360deg;
+  }
+}
+
+@keyframes neon-pulse {
+  from {
+    opacity: 0.14;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 0.32;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes neon-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neon-halo,
+  .neon-glow,
+  .neon-ring {
+    animation: none;
+  }
+}
+
+/* ---------- CV pop-up ---------- */
+.cv-backdrop {
+  animation: cv-fade 0.25s ease-out;
+}
+.cv-panel {
+  animation: cv-pop 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes cv-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes cv-pop {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cv-backdrop,
+  .cv-panel {
+    animation: none;
+  }
+}
