@@ -30,6 +30,7 @@ import Projects from './components/sections/Projects'
 import Research from './components/sections/Research'
 import About from './components/sections/About'
 import Contact from './components/sections/Contact'
+import TubesCursor from './components/ui/TubesCursor'
 
 export default function App() {
   // One place decides if the CV pop-up is open, so the top bar AND the dock can open it
@@ -38,6 +39,7 @@ export default function App() {
 
   return (
     <>
+      <TubesCursor />
       <TopBar onOpenCv={openCv} />
       <main>
         <Hero />
