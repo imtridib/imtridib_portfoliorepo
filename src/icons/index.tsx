@@ -77,3 +77,21 @@ export const DownloadIcon = (p: P) => (
 export const XIcon = (p: P) => (
   <Base {...p}><path d="M18 6 6 18M6 6l12 12" /></Base>
 )
+
+export const YoutubeIcon = (p: P) => (
+  <Base {...p}>
+    <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
+    <path d="m10 15 5-3-5-3z" />
+  </Base>
+)
+export const ListIcon = (p: P) => (
+  <Base {...p}><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" /></Base>
+)
+export const GridIcon = (p: P) => (
+  <Base {...p}>
+    <rect width="7" height="7" x="3" y="3" rx="1" />
+    <rect width="7" height="7" x="14" y="3" rx="1" />
+    <rect width="7" height="7" x="14" y="14" rx="1" />
+    <rect width="7" height="7" x="3" y="14" rx="1" />
+  </Base>
+)

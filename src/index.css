@@ -594,3 +594,45 @@
 @media (prefers-reduced-motion: reduce) {
   .aurora, .aurora-blob { animation: none; }
 }
+
+/* ---------- Project cards: hover, tilt and cursor glow ---------- */
+.tilt-card {
+  position: relative;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px)) scale(var(--sc, 1));
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
+  will-change: transform;
+}
+.tilt-card[data-active='1'] {
+  --lift: -4px;
+  --sc: 1.02;
+  transition: transform 0.12s ease-out, box-shadow 0.4s ease; /* quick while the mouse moves, slow on the way back */
+  box-shadow: 0 28px 70px -28px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.tilt-glow,
+.tilt-ring {
+  position: absolute; inset: 0; border-radius: inherit;
+  pointer-events: none; opacity: 0; transition: opacity 0.35s ease;
+}
+/* soft spotlight that follows the cursor, over the whole card */
+.tilt-glow {
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 20%, transparent), transparent 65%);
+}
+/* bright edge that follows the cursor */
+.tilt-ring {
+  padding: 1.5px;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), var(--accent), transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.tilt-card[data-active='1'] > .tilt-glow,
+.tilt-card[data-active='1'] > .tilt-ring { opacity: 1; }
+
+/* fade-in when switching between list and grid */
+.view-in { animation: view-in 0.4s ease-out; }
+@keyframes view-in { from { opacity: 0; transform: translateY(16px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt-card[data-active='1'] { --lift: 0px; --sc: 1; }
+  .view-in { animation: none; }
+}
