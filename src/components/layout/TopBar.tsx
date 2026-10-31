@@ -66,6 +66,7 @@ import { DownloadIcon } from '../../icons'
 export default function TopBar({ onOpenCv }: { onOpenCv: () => void }) {
   return (
     <header className="absolute inset-x-0 top-0 flex h-24 items-center justify-between px-6 lg:px-[60px]">
+     {/* <header className="fixed inset-x-0 top-0 z-50 flex h-20 items-center justify-between bg-[color-mix(in_srgb,var(--bg)_72%,transparent)] px-6 backdrop-blur-md lg:h-24 lg:px-[60px]"> */}
       <a href="#home" className="font-display text-[32px] font-normal lowercase leading-normal tracking-[-0.01em] text-muted">
         Tridib Chakraborty
       </a>

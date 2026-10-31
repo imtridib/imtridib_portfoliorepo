@@ -65,7 +65,6 @@ export const FileTextIcon = (p: P) => (
     <path d="M14 2v6h6M8 13h8M8 17h8M8 9h2" />
   </Base>
 )
-
 export const DownloadIcon = (p: P) => (
   <Base {...p}>
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -73,11 +72,9 @@ export const DownloadIcon = (p: P) => (
     <path d="M12 15V3" />
   </Base>
 )
-
 export const XIcon = (p: P) => (
   <Base {...p}><path d="M18 6 6 18M6 6l12 12" /></Base>
 )
-
 export const YoutubeIcon = (p: P) => (
   <Base {...p}>
     <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
@@ -93,5 +90,20 @@ export const GridIcon = (p: P) => (
     <rect width="7" height="7" x="14" y="3" rx="1" />
     <rect width="7" height="7" x="14" y="14" rx="1" />
     <rect width="7" height="7" x="3" y="14" rx="1" />
+  </Base>
+)
+export const ChevronDownIcon = (p: P) => (
+  <Base {...p}><path d="m6 9 6 6 6-6" /></Base>
+)
+export const BookOpenIcon = (p: P) => (
+  <Base {...p}>
+    <path d="M12 7v14" />
+    <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
+  </Base>
+)
+export const LinkIcon = (p: P) => (
+  <Base {...p}>
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
   </Base>
 )

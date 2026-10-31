@@ -21,6 +21,7 @@
 //     </>
 //   )
 // }
+import Skills from "./components/sections/Skills";
 import { useState } from "react";
 import TopBar from "./components/layout/TopBar";
 import Dock from "./components/layout/Dock/Dock";
@@ -49,8 +50,9 @@ export default function App() {
       {/* <Aurora /> */}
       <TopBar onOpenCv={openCv} />
       <main>
-        <Hero />
+        <Hero onOpenCv={openCv} />
         <Projects />
+        <Skills />
         <Research />
         <About />
         <Contact />

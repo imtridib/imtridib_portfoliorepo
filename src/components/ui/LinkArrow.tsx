@@ -13,6 +13,9 @@ export default function LinkArrow({ href, children, icon: Icon = ArrowUpRightIco
   return (
     <a
       href={href}
+      onClick={(e) => {
+        if (href === '#') e.preventDefault() // placeholder link: stay on the page, don't jump to the top
+      }}
       {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
       className="inline-flex items-center gap-1 border-b-2 border-accent pb-0.5 font-body text-base font-bold uppercase leading-6 text-accent"
     >

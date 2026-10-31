@@ -50,9 +50,7 @@
 }
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
   body {
     @apply bg-bg font-body text-lg leading-normal text-fg;
@@ -636,3 +634,6 @@
   .tilt-card[data-active='1'] { --lift: 0px; --sc: 1; }
   .view-in { animation: none; }
 }
+
+/* Skill + research cards: a plain slide up (no tilt, no scale), still with the cursor glow */
+.tilt-card.tilt-slide[data-active='1'] { --sc: 1; --lift: -6px; }
