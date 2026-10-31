@@ -31,7 +31,7 @@ import Projects from "./components/sections/Projects";
 import Research from "./components/sections/Research";
 import About from "./components/sections/About";
 import Contact from "./components/sections/Contact";
-// import TubesCursor from "./components/ui/TubesCursor";
+import TubesCursor from "./components/ui/TubesCursor";
 // import ShaderBackground from "./components/ui/ShaderBackground";
 // import GridPulse from "./components/ui/GridPulse";
 import SpringCursor from "./components/ui/SpringCursor";
@@ -46,7 +46,7 @@ export default function App() {
     <>
       {/* <GridPulse />    */}
       <SpringCursor />
-      {/* <TubesCursor /> */}
+      <TubesCursor />
       {/* <Aurora /> */}
       <TopBar onOpenCv={openCv} />
       <main>
