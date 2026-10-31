@@ -59,7 +59,6 @@
 // improvised
 
 import {
-  ArrowLeftRight,
   Bot,
   BrainCircuit,
   CloudUpload,
@@ -73,7 +72,6 @@ import {
   Webhook,
   Workflow,
   Wrench,
-  Zap,
   Binary,
   Route,
 } from 'lucide-react'
