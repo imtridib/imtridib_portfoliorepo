@@ -6,6 +6,7 @@ import Container from '../ui/Container'
 import ProjectCard from '../ui/ProjectCard'
 import ProjectGridCard from '../ui/ProjectGridCard'
 import ProjectModal from '../ui/ProjectModal'
+import { ScrollCard, ScrollHeadline, ScrollText } from '../ui/ScrollMotion'
 
 type View = 'list' | 'grid'
 type Filter = 'all' | ProjectCategory
@@ -39,26 +40,6 @@ function ViewToggle({ view, onChange }: { view: View; onChange: (v: View) => voi
     </div>
   )
 }
-
-// function FilterNav({ filter, onChange }: { filter: Filter; onChange: (f: Filter) => void }) {
-//   return (
-//     <nav aria-label="Filter projects" className="mt-10 flex flex-wrap gap-x-8 gap-y-1 border-b border-line">
-//       {FILTERS.map(({ id, label }) => (
-//         <button
-//           key={id}
-//           type="button"
-//           aria-pressed={filter === id}
-//           onClick={() => onChange(id)}
-//           className={`-mb-px cursor-pointer border-b-2 pb-3 pt-1 font-ui text-base font-medium transition-colors ${
-//             filter === id ? 'border-accent text-accent' : 'border-transparent text-muted hover:text-fg'
-//           }`}
-//         >
-//           {label}
-//         </button>
-//       ))}
-//     </nav>
-//   )
-// }
 
 function FilterNav({ filter, onChange }: { filter: Filter; onChange: (f: Filter) => void }) {
   return (
@@ -134,42 +115,50 @@ export default function Projects() {
       <Container>
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <h2 className="font-display text-[clamp(52px,6vw,76px)] font-normal leading-none">Featured Projects</h2>
-            <p className="mt-2 max-w-[600px] text-muted">
-              Here are some of the selected projects that showcase my passion for AI, machine learning and automation engineering.
-            </p>
+            <h2 className="font-display text-[clamp(52px,6vw,76px)] font-normal leading-none">
+              <ScrollHeadline text="Featured Projects" />
+            </h2>
+            <ScrollText order={1}>
+              <p className="mt-2 max-w-[600px] text-muted">
+                Here are some of the selected projects that showcase my passion for AI, machine learning and automation engineering.
+              </p>
+            </ScrollText>
           </div>
-          <ViewToggle view={view} onChange={changeView} />
+          <ScrollText order={2}>
+            <ViewToggle view={view} onChange={changeView} />
+          </ScrollText>
         </div>
 
-        <FilterNav filter={filter} onChange={changeFilter} />
+        <ScrollText order={3}>
+          <FilterNav filter={filter} onChange={changeFilter} />
+        </ScrollText>
 
-        {/* key replays the fade-in whenever the layout or the filter changes */}
-        <div key={`${view}-${filter}`} className="view-in mt-12">
+        {/* key remounts the cards (replaying their reveal) whenever the layout or the filter changes */}
+        <div key={`${view}-${filter}`} className="mt-12">
           {filtered.length === 0 ? (
             <p className="py-16 text-center text-muted">No projects in this category yet.</p>
           ) : view === 'list' ? (
             <div className="flex flex-col gap-20 lg:gap-[120px]">
               {visible.map((p, i) => (
-                // projects revealed by "See more" fade in; odd ones put the image card on the right
-                <div key={p.id} className={i >= limit ? 'view-in' : undefined}>
+                // odd ones put the image card on the right
+                <ScrollCard key={p.id}>
                   <ProjectCard project={p} reverse={i % 2 === 1} />
-                </div>
+                </ScrollCard>
               ))}
             </div>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {visible.map((p, i) => (
-                <div key={p.id} className={`h-full ${i >= limit ? 'view-in' : ''}`}>
+                <ScrollCard key={p.id} className="h-full" order={i % limit}>
                   <ProjectGridCard project={p} onOpen={(project, rect) => setSelected({ project, rect })} />
-                </div>
+                </ScrollCard>
               ))}
             </div>
           )}
         </div>
 
         {canExpand && (
-          <div className="mt-14 flex flex-col items-center gap-3">
+          <ScrollText className="mt-14 flex flex-col items-center gap-3">
             <p className="font-body text-sm text-muted">
               Showing {visible.length} of {filtered.length}
             </p>
@@ -182,7 +171,7 @@ export default function Projects() {
               {expanded ? 'See less' : 'See more'}
               <ChevronDownIcon className={`h-4 w-4 transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`} />
             </button>
-          </div>
+          </ScrollText>
         )}
 
         <ProjectModal project={selected?.project ?? null} fromRect={selected?.rect ?? null} onClose={() => setSelected(null)} />
