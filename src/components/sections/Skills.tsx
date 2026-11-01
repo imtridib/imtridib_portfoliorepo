@@ -4,7 +4,7 @@ import { skillGroups } from '../../data/skills'
 import { ChevronDownIcon } from '../../icons'
 import type { SkillGroup } from '../../types'
 import Container from '../ui/Container'
-import { ScrollHeadline, ScrollItem, ScrollStagger, ScrollText } from '../ui/ScrollMotion'
+import {ScrollItem, ScrollStagger, ScrollText } from '../ui/ScrollMotion'
 import TiltCard from '../ui/TiltCard'
 
 type SkillIcon = SkillGroup['skills'][number]['icon']
@@ -90,7 +90,7 @@ export default function Skills() {
     <section ref={sectionRef} id="skills" className="border-b border-line py-12 sm:py-20">
       <Container>
         <h2 className="font-display text-[clamp(42px,6vw,76px)] font-normal leading-none">
-          <ScrollHeadline text="Skills" />
+          skills
         </h2>
 
         <ScrollText order={1}>
@@ -101,7 +101,7 @@ export default function Skills() {
 
         <div className="mt-8 flex flex-col gap-8 sm:mt-14 sm:gap-14">
           {skillGroups.map((group, g) => (
-            <ScrollText
+            <ul
               // hidden groups remount on toggle so their scroll position is measured fresh
               key={g >= MOBILE_GROUPS ? `${group.title}-${expanded}` : group.title}
               // groups after the first two are hidden on phones until "See more" is pressed
@@ -110,7 +110,7 @@ export default function Skills() {
               <div className="border-t border-line pt-5 sm:pt-8">
                 <div className="mb-4 flex flex-wrap items-center gap-2.5 sm:mb-6 sm:gap-3">
                   <h3 className="font-display text-[clamp(24px,3.4vw,40px)] font-normal leading-tight">
-                    <ScrollHeadline text={group.title} />
+                    {group.title}
                   </h3>
 
                   {group.focus && (
@@ -131,7 +131,7 @@ export default function Skills() {
                   ))}
                 </ScrollStagger>
               </div>
-            </ScrollText>
+            </ul>
           ))}
         </div>
 

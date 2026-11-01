@@ -25,7 +25,7 @@
 //   )
 // }
 
-// improved version of the above code with scroll animations and better structure 
+// improved version of the above code with scroll animations and better structure
 // import { useRef } from 'react'
 // import { motion, useInView, useReducedMotion } from 'motion/react'
 // import Container from '../ui/Container'
@@ -160,32 +160,32 @@
 //   )
 // }
 
-import { useRef, useState, type ReactNode } from 'react'
-import { motion, useInView, useReducedMotion } from 'motion/react'
-import { about } from '../../data/about'
-import Container from '../ui/Container'
-import TiltCard from '../ui/TiltCard'
+import { useRef, useState, type ReactNode } from "react";
+import { motion, useInView, useReducedMotion } from "motion/react";
+import { about } from "../../data/about";
+import Container from "../ui/Container";
+import TiltCard from "../ui/TiltCard";
 
 /* ---------- one-time reveal helpers (local to this file) ---------- */
 
-const EASE = [0.22, 1, 0.36, 1] as const
+const EASE = [0.22, 1, 0.36, 1] as const;
 // once: true -> triggers the first time only; margin -> fires when ~10% inside the viewport
-const VIEW = { once: true, margin: '0px 0px -10% 0px' } as const
+const VIEW = { once: true, margin: "0px 0px -10% 0px" } as const;
 
 function RevealText({
   children,
   className,
   order = 0,
 }: {
-  children: ReactNode
-  className?: string
-  order?: number
+  children: ReactNode;
+  className?: string;
+  order?: number;
 }) {
-  const reduce = useReducedMotion()
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, VIEW)
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, VIEW);
 
-  if (reduce) return <div className={className}>{children}</div>
+  if (reduce) return <div className={className}>{children}</div>;
 
   return (
     <motion.div
@@ -197,15 +197,21 @@ function RevealText({
     >
       {children}
     </motion.div>
-  )
+  );
 }
 
-function RevealCard({ children, className }: { children: ReactNode; className?: string }) {
-  const reduce = useReducedMotion()
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, VIEW)
+function RevealCard({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, VIEW);
 
-  if (reduce) return <div className={className}>{children}</div>
+  if (reduce) return <div className={className}>{children}</div>;
 
   return (
     <motion.div
@@ -217,17 +223,17 @@ function RevealCard({ children, className }: { children: ReactNode; className?: 
     >
       {children}
     </motion.div>
-  )
+  );
 }
 
 function RevealHeadline({ text }: { text: string }) {
-  const reduce = useReducedMotion()
-  const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, VIEW)
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, VIEW);
 
-  if (reduce) return <span>{text}</span>
+  if (reduce) return <span>{text}</span>;
 
-  const words = text.split(' ')
+  const words = text.split(" ");
   return (
     <span ref={ref} aria-label={text}>
       {words.map((word, i) => (
@@ -235,32 +241,34 @@ function RevealHeadline({ text }: { text: string }) {
           <span className="inline-block overflow-hidden pb-[0.15em] -mb-[0.15em] align-bottom">
             <motion.span
               className="inline-block"
-              initial={{ y: '110%', opacity: 0 }}
-              animate={inView ? { y: '0%', opacity: 1 } : undefined}
+              initial={{ y: "110%", opacity: 0 }}
+              animate={inView ? { y: "0%", opacity: 1 } : undefined}
               transition={{ duration: 0.7, ease: EASE, delay: i * 0.05 }}
             >
               {word}
             </motion.span>
           </span>
-          {i < words.length - 1 ? ' ' : ''}
+          {i < words.length - 1 ? " " : ""}
         </span>
       ))}
     </span>
-  )
+  );
 }
 
 /* ---------- section ---------- */
 
 export default function About() {
-  const { summary, paragraphs, degree, institution } = about
-  const [logoFailed, setLogoFailed] = useState(false)
+  const { summary, paragraphs, degree, institution } = about;
+  const [logoFailed, setLogoFailed] = useState(false);
 
   return (
     <section id="about" className="border-b border-line py-20">
       <Container className="grid items-center gap-12 lg:grid-cols-[1.5fr_1fr]">
         <div>
           {/* plain heading: no animation */}
-          <h2 className="font-display text-5xl font-normal sm:text-6xl">About me</h2>
+          <h2 className="font-display text-5xl font-normal sm:text-6xl">
+            About me
+          </h2>
 
           {/* summary line: words rise one after another, once */}
           <h3 className="mt-7 font-body text-2xl font-medium leading-snug">
@@ -268,9 +276,18 @@ export default function About() {
           </h3>
 
           {/* paragraphs slide in one after another, once */}
-          {paragraphs.map((text, i) => (
+          {/* {paragraphs.map((text, i) => (
             <RevealText key={text} order={i + 1} className="mt-5">
               <p className="text-muted">{text}</p>
+            </RevealText>
+          ))} */}
+          {/* paragraphs slide in one after another, once */}
+          {paragraphs.map((text, i) => (
+            <RevealText key={i} order={i + 1} className="mt-5">
+              <p
+                className="text-muted"
+                dangerouslySetInnerHTML={{ __html: text }}
+              />
             </RevealText>
           ))}
 
@@ -283,8 +300,16 @@ export default function About() {
 
         {/* university card: rises into place once; keeps the tilt + cursor glow on hover */}
         <RevealCard>
-          <TiltCard max={5} className="rounded-2xl border border-line bg-card p-8">
-            <a href={institution.url} target="_blank" rel="noreferrer" className="relative z-10 block">
+          <TiltCard
+            max={5}
+            className="rounded-2xl border border-line bg-card p-8"
+          >
+            <a
+              href={institution.url}
+              target="_blank"
+              rel="noreferrer"
+              className="relative z-10 block"
+            >
               <div className="rounded-xl bg-white p-5">
                 {institution.logo && !logoFailed ? (
                   <img
@@ -296,7 +321,9 @@ export default function About() {
                   />
                 ) : (
                   // shown until the logo file exists
-                  <p className="py-10 text-center font-body text-xl font-semibold text-black">{institution.name}</p>
+                  <p className="py-10 text-center font-body text-xl font-semibold text-black">
+                    {institution.name}
+                  </p>
                 )}
               </div>
               <p className="mt-6 text-center text-sm text-muted">
@@ -313,5 +340,5 @@ export default function About() {
         </RevealCard>
       </Container>
     </section>
-  )
+  );
 }

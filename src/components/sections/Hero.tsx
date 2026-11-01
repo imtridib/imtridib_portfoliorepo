@@ -1,4 +1,3 @@
-
 // // improvised
 // import Button from "../ui/Button";
 // import Container from "../ui/Container";
@@ -85,6 +84,7 @@
 //   );
 // }
 
+// Imrpovised
 
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
@@ -102,12 +102,16 @@ const WORD_STEP = 0.12; // delay between words
 const WORD_DURATION = 1.2; // how long each word takes to slide in
 
 // Typewriter (summary)
-const SUMMARY =
-  "An AI ML & Automation Engineer passionate about building accessible and user friendly websites.";
-const TYPE_START = 2.0; // seconds: the heading has fully landed by ~1.9s
-const TYPE_BASE = 28; // ms per character, plus a random 0..TYPE_JITTER for a natural rhythm
-const TYPE_JITTER = 40;
-const TYPE_CURSOR_LINGER = 2500; // ms the blinking cursor stays after typing finishes (0 = remove at once)
+// const SUMMARY =
+//   "I’m a Computer Science and Engineering graduate focused on AI/ML engineering and AI automation. I combine a strong engineering foundation with hands-on experience building practical, ";
+
+const TYPED_SUMMARY =
+  "Intelligent solutions—from Machine learning models to automated workflows. An AI ML & Automation Engineer passionate about building accessible and user friendly websites.";
+
+const TYPE_START = 0.5;
+const TYPE_BASE = 45; // ms per character
+const TYPE_JITTER = 25; // small variation between characters
+const TYPE_CURSOR_LINGER = 1800; // ms the blinking cursor stays after typing finishes (0 = remove at once)
 
 /** "Hi, I am Tridib Chakraborty." revealed one word at a time: slide up + fade in. */
 function HeadingWords({ text, reduce }: { text: string; reduce: boolean }) {
@@ -120,7 +124,11 @@ function HeadingWords({ text, reduce }: { text: string; reduce: boolean }) {
             className="inline-block"
             initial={reduce ? false : { opacity: 0, y: "0.6em" }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: WORD_DURATION, delay: HEADING_START + i * WORD_STEP, ease: EASE }}
+            transition={{
+              duration: WORD_DURATION,
+              delay: HEADING_START + i * WORD_STEP,
+              ease: EASE,
+            }}
           >
             {word}
           </motion.span>
@@ -135,9 +143,116 @@ function HeadingWords({ text, reduce }: { text: string; reduce: boolean }) {
  * Typewriter for the summary. The untyped part stays in the layout as invisible text and the
  * cursor takes no width, so the paragraph keeps its final size and line breaks from the start.
  */
+// function TypewriterText({ text, reduce }: { text: string; reduce: boolean }) {
+//   const [count, setCount] = useState(reduce ? text.length : 0);
+//   const [cursor, setCursor] = useState(false);
+
+//   useEffect(() => {
+//     if (reduce) {
+//       setCount(text.length);
+//       setCursor(false);
+//       return;
+//     }
+//     setCount(0);
+//     setCursor(false);
+
+//     let i = 0;
+//     let timer = 0;
+//     const tick = () => {
+//       i += 1;
+//       setCount(i);
+//       if (i >= text.length) {
+//         timer = window.setTimeout(() => setCursor(false), TYPE_CURSOR_LINGER);
+//         return;
+//       }
+//       const ch = text[i - 1];
+//       let delay = TYPE_BASE + Math.random() * TYPE_JITTER;
+//       if (ch === " ") delay += 25; // tiny pause between words
+//       if (ch === "," || ch === ".") delay += 220; // longer pause at punctuation
+//       timer = window.setTimeout(tick, delay);
+//     };
+//     timer = window.setTimeout(() => {
+//       setCursor(true);
+//       tick();
+//     }, TYPE_START * 1000);
+
+//     return () => window.clearTimeout(timer);
+//   }, [text, reduce]);
+
+//   return (
+//     <>
+//       <span className="sr-only">{text}</span>
+//       <span aria-hidden="true">
+//         {text.slice(0, count)}
+//         {cursor && (
+//           <motion.span
+//             className="relative inline-block h-[1em] w-0 align-[-0.12em]"
+//             animate={{ opacity: [1, 1, 0, 0] }}
+//             transition={{
+//               duration: 1,
+//               repeat: Infinity,
+//               times: [0, 0.5, 0.5, 1],
+//             }}
+//           >
+//             <span className="absolute left-[1px] top-0 h-full w-[2px] rounded-full bg-[var(--accent)]" />
+//           </motion.span>
+//         )}
+//         <span className="invisible">{text.slice(count)}</span>
+//       </span>
+//     </>
+//   );
+// }
+
+// improvised
 function TypewriterText({ text, reduce }: { text: string; reduce: boolean }) {
   const [count, setCount] = useState(reduce ? text.length : 0);
   const [cursor, setCursor] = useState(false);
+
+  // Words and phrases to highlight
+  const highlights = [
+    "Intelligent solutions",
+    "Machine learning models",
+    "AI ML & Automation Engineer",
+  ];
+
+  // Render typed characters with selective highlights
+  const renderHighlightedText = () => {
+    const parts = [];
+    let index = 0;
+
+    while (index < count) {
+      const match = highlights.find((word) => text.startsWith(word, index));
+
+      if (match) {
+        const visibleText = text.slice(
+          index,
+          Math.min(index + match.length, count),
+        );
+
+        parts.push(
+          <strong key={index} className="font-semibold text-accent">
+            {visibleText}
+          </strong>,
+        );
+
+        index += visibleText.length;
+      } else {
+        const nextHighlight = highlights
+          .map((word) => text.indexOf(word, index))
+          .filter((position) => position !== -1);
+
+        const nextIndex =
+          nextHighlight.length > 0 ? Math.min(...nextHighlight) : count;
+
+        const end = Math.min(nextIndex, count);
+
+        parts.push(text.slice(index, end));
+        index = end;
+      }
+    }
+
+    return parts;
+  };
 
   useEffect(() => {
     if (reduce) {
@@ -145,24 +260,32 @@ function TypewriterText({ text, reduce }: { text: string; reduce: boolean }) {
       setCursor(false);
       return;
     }
+
     setCount(0);
     setCursor(false);
 
     let i = 0;
     let timer = 0;
+
     const tick = () => {
       i += 1;
       setCount(i);
+
       if (i >= text.length) {
         timer = window.setTimeout(() => setCursor(false), TYPE_CURSOR_LINGER);
         return;
       }
+
       const ch = text[i - 1];
+
       let delay = TYPE_BASE + Math.random() * TYPE_JITTER;
-      if (ch === " ") delay += 25; // tiny pause between words
-      if (ch === "," || ch === ".") delay += 220; // longer pause at punctuation
+
+      if (ch === " ") delay += 25;
+      if (ch === "," || ch === ".") delay += 220;
+
       timer = window.setTimeout(tick, delay);
     };
+
     timer = window.setTimeout(() => {
       setCursor(true);
       tick();
@@ -174,17 +297,24 @@ function TypewriterText({ text, reduce }: { text: string; reduce: boolean }) {
   return (
     <>
       <span className="sr-only">{text}</span>
+
       <span aria-hidden="true">
-        {text.slice(0, count)}
+        {renderHighlightedText()}
+
         {cursor && (
           <motion.span
             className="relative inline-block h-[1em] w-0 align-[-0.12em]"
             animate={{ opacity: [1, 1, 0, 0] }}
-            transition={{ duration: 1, repeat: Infinity, times: [0, 0.5, 0.5, 1] }}
+            transition={{
+              duration: 1,
+              repeat: Infinity,
+              times: [0, 0.5, 0.5, 1],
+            }}
           >
             <span className="absolute left-[1px] top-0 h-full w-[2px] rounded-full bg-[var(--accent)]" />
           </motion.span>
         )}
+
         <span className="invisible">{text.slice(count)}</span>
       </span>
     </>
@@ -208,10 +338,35 @@ export default function Hero({ onOpenCv }: { onOpenCv: () => void }) {
               aria-label="Hi, I am Tridib Chakraborty."
               className="font-display text-[clamp(64px,8vw,101px)] font-normal leading-[0.9]"
             >
-              <HeadingWords text="Hi, I am Tridib Chakraborty." reduce={reduce} />
+              <HeadingWords
+                text="Hi, I am Tridib Chakraborty."
+                reduce={reduce}
+              />
             </h1>
+            {/* <p className="mt-2 text-muted">
+              {SUMMARY} <TypewriterText text={TYPED_SUMMARY} reduce={reduce} />
+            </p> */}
+
+            {/* <p className="mt-2 text-muted">
+              I’m a Computer Science and Engineering graduate focused on{" "}
+              <strong className="text-accent">AI/ML engineering</strong> and{" "}
+              <strong className="text-accent">AI automation</strong>. I combine
+              a strong engineering foundation with hands-on experience building
+              practical, <TypewriterText text={TYPED_SUMMARY} reduce={reduce} />
+            </p> */}
+
             <p className="mt-2 text-muted">
-              <TypewriterText text={SUMMARY} reduce={reduce} />
+              I’m a Computer Science and Engineering graduate focused on{" "}
+              <strong className="font-semibold text-accent">
+                AI/ML engineering
+              </strong>{" "}
+              and{" "}
+              <strong className="font-semibold text-accent">
+                AI automation
+              </strong>
+              . I combine a strong engineering foundation with hands-on
+              experience building practical,{" "}
+              <TypewriterText text={TYPED_SUMMARY} reduce={reduce} />
             </p>
           </div>
           {/* <div className="flex items-center gap-4">

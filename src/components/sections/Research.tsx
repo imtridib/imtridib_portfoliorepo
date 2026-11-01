@@ -74,7 +74,7 @@ import { useMemo, useState } from 'react'
 import { research } from '../../data/research'
 import Container from '../ui/Container'
 import ResearchCard from '../ui/ResearchCard'
-import { ScrollCard, ScrollHeadline, ScrollText } from '../ui/ScrollMotion'
+import { ScrollCard, ScrollHeadline } from '../ui/ScrollMotion'
 
 export default function Research() {
   const [category, setCategory] = useState('All')
@@ -97,14 +97,14 @@ export default function Research() {
           <span aria-hidden="true" className="mt-3 hidden flex-1 border-t border-line sm:block" />
         </div>
 
-        <ScrollText order={1}>
+        {/* <ScrollText order={1}> */}
           <p className="mt-4 max-w-[640px] text-base text-muted sm:text-lg">
             My published research papers in the field of AI, Computer Vision and Machine Learning.
           </p>
-        </ScrollText>
+        {/* </ScrollText> */}
 
         {categories.length > 2 && (
-          <ScrollText order={2}>
+          // <ScrollText order={2}>
             <div role="group" aria-label="Filter publications" className="mt-8 flex flex-wrap gap-2">
               {categories.map((c) => (
                 <button
@@ -120,7 +120,7 @@ export default function Research() {
                 </button>
               ))}
             </div>
-          </ScrollText>
+          // </ScrollText>
         )}
 
         <div className="mt-10 sm:mt-12">
