@@ -416,8 +416,11 @@ export default function Hero({ onOpenCv }: { onOpenCv: () => void }) {
 
               <img
                 src="/images/portrait.png"
-                alt="Portrait of Tridib Chakraborty"
+                alt="Tridib Chakraborty, AI/ML Engineer"
                 className="portrait-img absolute inset-0 h-full w-full object-cover object-[50%_15%] origin-[50%_35%] transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
                 onError={(e) => (e.currentTarget.style.display = "none")}
               />
 

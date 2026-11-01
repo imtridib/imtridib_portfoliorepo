@@ -1,0 +1,875 @@
+﻿===== index.html =====
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Tridib Chakraborty â€“ AI ML Englineer</title>
+    <script>
+      // Apply the saved theme before first paint (defaults to dark)
+      (function () {
+        var t;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : 'dark');
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+===== App.tsx =====
+// import TopBar from './components/layout/TopBar'
+// import Dock from './components/layout/Dock/Dock'
+// import Hero from './components/sections/Hero'
+// import Projects from './components/sections/Projects'
+// import Research from './components/sections/Research'
+// import About from './components/sections/About'
+// import Contact from './components/sections/Contact'
+
+// export default function App() {
+//   return (
+//     <>
+//       <TopBar />
+//       <main>
+//         <Hero />
+//         <Projects />
+//         <Research />
+//         <About />
+//         <Contact />
+//       </main>
+//       <Dock />
+//     </>
+//   )
+// }
+import Skills from "./components/sections/Skills";
+import { useState } from "react";
+import TopBar from "./components/layout/TopBar";
+import Dock from "./components/layout/Dock/Dock";
+import CvModal from "./components/ui/CvModal";
+import Hero from "./components/sections/Hero";
+import Projects from "./components/sections/Projects";
+import Research from "./components/sections/Research";
+import About from "./components/sections/About";
+import Contact from "./components/sections/Contact";
+// import TubesCursor from "./components/ui/TubesCursor";
+// import ShaderBackground from "./components/ui/ShaderBackground";
+// import GridPulse from "./components/ui/GridPulse";
+import SpringCursor from "./components/ui/SpringCursor";
+// import Aurora from './components/ui/Aurora'
+
+export default function App() {
+  // One place decides if the CV pop-up is open, so the top bar AND the dock can open it
+  const [cvOpen, setCvOpen] = useState(false);
+  const openCv = () => setCvOpen(true);
+
+  return (
+    <>
+      {/* <GridPulse />    */}
+      <SpringCursor />
+      {/* <TubesCursor /> */}
+      {/* <Aurora /> */}
+      <TopBar onOpenCv={openCv} />
+      <main>
+        <Hero onOpenCv={openCv} />
+        <Projects />
+        <Skills />
+        <Research />
+        <About />
+        <Contact />
+      </main>
+      <Dock onOpenCv={openCv} />
+      <CvModal open={cvOpen} onClose={() => setCvOpen(false)} />
+    </>
+  );
+}
+===== Hero.tsx =====
+// // improvised
+// import Button from "../ui/Button";
+// import Container from "../ui/Container";
+// import SocialLinks from "../ui/SocialLinks";
+// import { FileTextIcon } from "../../icons";
+
+// export default function Hero({ onOpenCv }: { onOpenCv: () => void }) {
+//   return (
+//     // <section id="home" className="flex min-h-[906px] items-center border-b border-line pb-20 pt-[126px]">
+//     <section
+//       id="home"
+//       className="border-b border-line pb-20 pt-[104px] lg:pt-[120px]"
+//     >
+//       {/* two columns: text (wider) + a smaller portrait */}
+//       <Container className="grid items-center gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+//         <div className="flex flex-col gap-10">
+//           <div>
+//             <h1 className="font-display text-[clamp(64px,8vw,101px)] font-normal leading-[0.9]">
+//               Hi, I am Tridib Chakraborty.
+//             </h1>
+//             <p className="mt-2 text-muted">
+//               An AI ML & Automation Engineer passionate about building
+//               accessible and user friendly websites.
+//             </p>
+//           </div>
+//           {/* <div className="flex items-center gap-4">
+//             <Button href="#projects" withDot>My Projects</Button>
+//             <SocialLinks round size={26} only={['LinkedIn', 'GitHub']} />
+//           </div> */}
+//           <div className="flex flex-wrap items-center gap-4">
+//             <Button href="#projects" withDot>
+//               My Projects
+//             </Button>
+
+//             {/* Black button: opens the CV pop-up */}
+//             <button
+//               type="button"
+//               onClick={onOpenCv}
+//               aria-haspopup="dialog"
+//               style={{
+//                 color: "var(--accent)",
+//                 borderColor: "var(--accent)",
+//               }}
+//               className="inline-flex h-[54px] cursor-pointer items-center gap-2 rounded-full border bg-transparent px-6 font-body text-base font-bold uppercase leading-none transition-shadow duration-300 hover:shadow-[0_0_18px_rgba(56,189,248,0.45)] dark:text-white dark:border-white/20"
+//             >
+//               View CV
+//               <FileTextIcon className="h-4 w-4" />
+//             </button>
+
+//             <SocialLinks round size={26} only={["LinkedIn", "GitHub"]} />
+//           </div>
+//         </div>
+
+//         <div className="portrait-in group relative mx-auto w-full max-w-[380px]">
+//           {/* This wrapper lifts on hover, so the neon moves together with the card */}
+//           <div className="relative transition-transform duration-500 ease-out group-hover:-translate-x-1 group-hover:-translate-y-2">
+//             {/* neon layers (behind the card) */}
+//             <span className="neon-halo" aria-hidden="true" />
+//             <span className="neon-glow" aria-hidden="true" />
+//             <span className="neon-ring" aria-hidden="true" />
+
+//             {/* card */}
+//             <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-portrait">
+//               <span
+//                 className="absolute inset-0 grid place-items-center font-display text-[110px] leading-none text-black/10"
+//                 aria-hidden="true"
+//               >
+//                 TC
+//               </span>
+
+//               <img
+//                 src="/images/portrait.png"
+//                 alt="Portrait of Tridib Chakraborty"
+//                 className="portrait-img absolute inset-0 h-full w-full object-cover object-[50%_15%] origin-[50%_35%] transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
+//                 onError={(e) => (e.currentTarget.style.display = "none")}
+//               />
+
+//               <span className="portrait-shine" aria-hidden="true" />
+//             </div>
+//           </div>
+//         </div>
+//       </Container>
+//     </section>
+//   );
+// }
+
+// Imrpovised
+
+import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import Button from "../ui/Button";
+import Container from "../ui/Container";
+import SocialLinks from "../ui/SocialLinks";
+import { FileTextIcon } from "../../icons";
+
+// Expo-out curve: quick start, long soft landing
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+// Timing (seconds): tweak these to speed up or slow down the two animations
+const HEADING_START = 0.2; // delay before the first word
+const WORD_STEP = 0.12; // delay between words
+const WORD_DURATION = 1.2; // how long each word takes to slide in
+
+// Typewriter (summary)
+// const SUMMARY =
+//   "Iâ€™m a Computer Science and Engineering graduate focused on AI/ML engineering and AI automation. I combine a strong engineering foundation with hands-on experience building practical, ";
+
+const TYPED_SUMMARY =
+  "Intelligent solutionsâ€”from Machine learning models to automated workflows. An AI ML & Automation Engineer passionate about building accessible and user friendly websites.";
+
+const TYPE_START = 0.5;
+const TYPE_BASE = 45; // ms per character
+const TYPE_JITTER = 25; // small variation between characters
+const TYPE_CURSOR_LINGER = 1800; // ms the blinking cursor stays after typing finishes (0 = remove at once)
+
+/** "Hi, I am Tridib Chakraborty." revealed one word at a time: slide up + fade in. */
+function HeadingWords({ text, reduce }: { text: string; reduce: boolean }) {
+  const words = text.split(" ");
+  return (
+    <>
+      {words.map((word, i) => (
+        <span key={i} aria-hidden="true">
+          <motion.span
+            className="inline-block"
+            initial={reduce ? false : { opacity: 0, y: "0.6em" }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: WORD_DURATION,
+              delay: HEADING_START + i * WORD_STEP,
+              ease: EASE,
+            }}
+          >
+            {word}
+          </motion.span>
+          {i < words.length - 1 ? " " : ""}
+        </span>
+      ))}
+    </>
+  );
+}
+
+/**
+ * Typewriter for the summary. The untyped part stays in the layout as invisible text and the
+ * cursor takes no width, so the paragraph keeps its final size and line breaks from the start.
+ */
+// function TypewriterText({ text, reduce }: { text: string; reduce: boolean }) {
+//   const [count, setCount] = useState(reduce ? text.length : 0);
+//   const [cursor, setCursor] = useState(false);
+
+//   useEffect(() => {
+//     if (reduce) {
+//       setCount(text.length);
+//       setCursor(false);
+//       return;
+//     }
+//     setCount(0);
+//     setCursor(false);
+
+//     let i = 0;
+//     let timer = 0;
+//     const tick = () => {
+//       i += 1;
+//       setCount(i);
+//       if (i >= text.length) {
+//         timer = window.setTimeout(() => setCursor(false), TYPE_CURSOR_LINGER);
+//         return;
+//       }
+//       const ch = text[i - 1];
+//       let delay = TYPE_BASE + Math.random() * TYPE_JITTER;
+//       if (ch === " ") delay += 25; // tiny pause between words
+//       if (ch === "," || ch === ".") delay += 220; // longer pause at punctuation
+//       timer = window.setTimeout(tick, delay);
+//     };
+//     timer = window.setTimeout(() => {
+//       setCursor(true);
+//       tick();
+//     }, TYPE_START * 1000);
+
+//     return () => window.clearTimeout(timer);
+//   }, [text, reduce]);
+
+//   return (
+//     <>
+//       <span className="sr-only">{text}</span>
+//       <span aria-hidden="true">
+//         {text.slice(0, count)}
+//         {cursor && (
+//           <motion.span
+//             className="relative inline-block h-[1em] w-0 align-[-0.12em]"
+//             animate={{ opacity: [1, 1, 0, 0] }}
+//             transition={{
+//               duration: 1,
+//               repeat: Infinity,
+//               times: [0, 0.5, 0.5, 1],
+//             }}
+//           >
+//             <span className="absolute left-[1px] top-0 h-full w-[2px] rounded-full bg-[var(--accent)]" />
+//           </motion.span>
+//         )}
+//         <span className="invisible">{text.slice(count)}</span>
+//       </span>
+//     </>
+//   );
+// }
+
+// improvised
+function TypewriterText({ text, reduce }: { text: string; reduce: boolean }) {
+  const [count, setCount] = useState(reduce ? text.length : 0);
+  const [cursor, setCursor] = useState(false);
+
+  // Words and phrases to highlight
+  const highlights = [
+    "Intelligent solutions",
+    "Machine learning models",
+    "AI ML & Automation Engineer",
+  ];
+
+  // Render typed characters with selective highlights
+  const renderHighlightedText = () => {
+    const parts = [];
+    let index = 0;
+
+    while (index < count) {
+      const match = highlights.find((word) => text.startsWith(word, index));
+
+      if (match) {
+        const visibleText = text.slice(
+          index,
+          Math.min(index + match.length, count),
+        );
+
+        parts.push(
+          <strong key={index} className="font-semibold text-accent">
+            {visibleText}
+          </strong>,
+        );
+
+        index += visibleText.length;
+      } else {
+        const nextHighlight = highlights
+          .map((word) => text.indexOf(word, index))
+          .filter((position) => position !== -1);
+
+        const nextIndex =
+          nextHighlight.length > 0 ? Math.min(...nextHighlight) : count;
+
+        const end = Math.min(nextIndex, count);
+
+        parts.push(text.slice(index, end));
+        index = end;
+      }
+    }
+
+    return parts;
+  };
+
+  useEffect(() => {
+    if (reduce) {
+      setCount(text.length);
+      setCursor(false);
+      return;
+    }
+
+    setCount(0);
+    setCursor(false);
+
+    let i = 0;
+    let timer = 0;
+
+    const tick = () => {
+      i += 1;
+      setCount(i);
+
+      if (i >= text.length) {
+        timer = window.setTimeout(() => setCursor(false), TYPE_CURSOR_LINGER);
+        return;
+      }
+
+      const ch = text[i - 1];
+
+      let delay = TYPE_BASE + Math.random() * TYPE_JITTER;
+
+      if (ch === " ") delay += 25;
+      if (ch === "," || ch === ".") delay += 220;
+
+      timer = window.setTimeout(tick, delay);
+    };
+
+    timer = window.setTimeout(() => {
+      setCursor(true);
+      tick();
+    }, TYPE_START * 1000);
+
+    return () => window.clearTimeout(timer);
+  }, [text, reduce]);
+
+  return (
+    <>
+      <span className="sr-only">{text}</span>
+
+      <span aria-hidden="true">
+        {renderHighlightedText()}
+
+        {cursor && (
+          <motion.span
+            className="relative inline-block h-[1em] w-0 align-[-0.12em]"
+            animate={{ opacity: [1, 1, 0, 0] }}
+            transition={{
+              duration: 1,
+              repeat: Infinity,
+              times: [0, 0.5, 0.5, 1],
+            }}
+          >
+            <span className="absolute left-[1px] top-0 h-full w-[2px] rounded-full bg-[var(--accent)]" />
+          </motion.span>
+        )}
+
+        <span className="invisible">{text.slice(count)}</span>
+      </span>
+    </>
+  );
+}
+
+export default function Hero({ onOpenCv }: { onOpenCv: () => void }) {
+  const reduce = !!useReducedMotion();
+
+  return (
+    // <section id="home" className="flex min-h-[906px] items-center border-b border-line pb-20 pt-[126px]">
+    <section
+      id="home"
+      className="border-b border-line pb-20 pt-[104px] lg:pt-[120px]"
+    >
+      {/* two columns: text (wider) + a smaller portrait */}
+      <Container className="grid items-center gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="flex flex-col gap-10">
+          <div>
+            <h1
+              aria-label="Hi, I am Tridib Chakraborty."
+              className="font-display text-[clamp(64px,8vw,101px)] font-normal leading-[0.9]"
+            >
+              <HeadingWords
+                text="Hi, I am Tridib Chakraborty."
+                reduce={reduce}
+              />
+            </h1>
+            {/* <p className="mt-2 text-muted">
+              {SUMMARY} <TypewriterText text={TYPED_SUMMARY} reduce={reduce} />
+            </p> */}
+
+            {/* <p className="mt-2 text-muted">
+              Iâ€™m a Computer Science and Engineering graduate focused on{" "}
+              <strong className="text-accent">AI/ML engineering</strong> and{" "}
+              <strong className="text-accent">AI automation</strong>. I combine
+              a strong engineering foundation with hands-on experience building
+              practical, <TypewriterText text={TYPED_SUMMARY} reduce={reduce} />
+            </p> */}
+
+            <p className="mt-2 text-muted">
+              Iâ€™m a Computer Science and Engineering graduate focused on{" "}
+              <strong className="font-semibold text-accent">
+                AI/ML engineering
+              </strong>{" "}
+              and{" "}
+              <strong className="font-semibold text-accent">
+                AI automation
+              </strong>
+              . I combine a strong engineering foundation with hands-on
+              experience building practical,{" "}
+              <TypewriterText text={TYPED_SUMMARY} reduce={reduce} />
+            </p>
+          </div>
+          {/* <div className="flex items-center gap-4">
+            <Button href="#projects" withDot>My Projects</Button>
+            <SocialLinks round size={26} only={['LinkedIn', 'GitHub']} />
+          </div> */}
+          <div className="flex flex-wrap items-center gap-4">
+            <Button href="#projects" withDot>
+              My Projects
+            </Button>
+
+            {/* Black button: opens the CV pop-up */}
+            <button
+              type="button"
+              onClick={onOpenCv}
+              aria-haspopup="dialog"
+              style={{
+                color: "var(--accent)",
+                borderColor: "var(--accent)",
+              }}
+              className="inline-flex h-[54px] cursor-pointer items-center gap-2 rounded-full border bg-transparent px-6 font-body text-base font-bold uppercase leading-none transition-shadow duration-300 hover:shadow-[0_0_18px_rgba(56,189,248,0.45)] dark:text-white dark:border-white/20"
+            >
+              View CV
+              <FileTextIcon className="h-4 w-4" />
+            </button>
+
+            <SocialLinks round size={26} only={["LinkedIn", "GitHub"]} />
+          </div>
+        </div>
+
+        <div className="portrait-in group relative mx-auto w-full max-w-[380px]">
+          {/* This wrapper lifts on hover, so the neon moves together with the card */}
+          <div className="relative transition-transform duration-500 ease-out group-hover:-translate-x-1 group-hover:-translate-y-2">
+            {/* neon layers (behind the card) */}
+            <span className="neon-halo" aria-hidden="true" />
+            <span className="neon-glow" aria-hidden="true" />
+            <span className="neon-ring" aria-hidden="true" />
+
+            {/* card */}
+            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-portrait">
+              <span
+                className="absolute inset-0 grid place-items-center font-display text-[110px] leading-none text-black/10"
+                aria-hidden="true"
+              >
+                TC
+              </span>
+
+              <img
+                src="/images/portrait.png"
+                alt="Portrait of Tridib Chakraborty"
+                className="portrait-img absolute inset-0 h-full w-full object-cover object-[50%_15%] origin-[50%_35%] transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
+                onError={(e) => (e.currentTarget.style.display = "none")}
+              />
+
+              <span className="portrait-shine" aria-hidden="true" />
+            </div>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+===== About.tsx =====
+// import Container from '../ui/Container'
+// import LinkArrow from '../ui/LinkArrow'
+
+// export default function About() {
+//   return (
+//     <section id="about" className="border-b border-line py-[120px]">
+//       <Container className="flex flex-col justify-between gap-12 lg:flex-row">
+//         <h2 className="font-display text-[clamp(64px,8vw,101px)] font-normal leading-[0.9]">About me</h2>
+//         <div className="flex flex-col items-start gap-4 lg:flex-[0_1_704px]">
+//           <h3 className="font-body text-[26px] font-medium leading-[1.4] sm:text-[32px]">
+//             I am a front-end developer based in Sydney. Has Mechanical Engineering background.
+//           </h3>
+//           <p className="text-muted">
+//             I am a front-end developer based in Sydney looking for exciting opportunities. Has Mechanical Engineering
+//             background. Likes to focus on accessibility when developing. Passionate and curious about solving problems.
+//             Currently, Iâ€™m exploring Reactjs, Webflow and a bit of Designing. While I am not programming, I enjoy playing
+//             football, photography and playing Valorant. Learning more to improve skill.
+//           </p>
+//           <div className="mt-8">
+//             <LinkArrow href="#contact" icon={null}>Get in touch</LinkArrow>
+//           </div>
+//         </div>
+//       </Container>
+//     </section>
+//   )
+// }
+
+// improved version of the above code with scroll animations and better structure
+// import { useRef } from 'react'
+// import { motion, useInView, useReducedMotion } from 'motion/react'
+// import Container from '../ui/Container'
+// import LinkArrow from '../ui/LinkArrow'
+
+// // Same reveal as the Hero heading: expo-out curve, words slide up and fade in one by one
+// const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+// const WORD_STEP = 0.12 // delay between words
+// const WORD_DURATION = 1.2 // how long each word takes
+
+// /** Plays once, the first time the heading scrolls into view, and never again. */
+// function HeadingWords({ text }: { text: string }) {
+//   const reduce = !!useReducedMotion()
+//   const ref = useRef<HTMLSpanElement>(null)
+//   const inView = useInView(ref, { once: true, amount: 0.6 })
+//   const words = text.split(' ')
+
+//   return (
+//     <span ref={ref} aria-label={text}>
+//       {words.map((word, i) => (
+//         <span key={i} aria-hidden="true">
+//           <motion.span
+//             className="inline-block"
+//             initial={reduce ? false : { opacity: 0, y: '0.6em' }}
+//             animate={inView || reduce ? { opacity: 1, y: 0 } : undefined}
+//             transition={{ duration: WORD_DURATION, delay: i * WORD_STEP, ease: EASE }}
+//           >
+//             {word}
+//           </motion.span>
+//           {i < words.length - 1 ? ' ' : ''}
+//         </span>
+//       ))}
+//     </span>
+//   )
+// }
+
+// export default function About() {
+//   return (
+//     <section id="about" className="border-b border-line py-[120px]">
+//       <Container className="flex flex-col justify-between gap-12 lg:flex-row">
+//         <h2 className="font-display text-[clamp(64px,8vw,101px)] font-normal leading-[0.9]">
+//           <HeadingWords text="About me" />
+//         </h2>
+//         <div className="flex flex-col items-start gap-4 lg:flex-[0_1_704px]">
+//           <h3 className="font-body text-[26px] font-medium leading-[1.4] sm:text-[32px]">
+//             I am a front-end developer based in Sydney. Has Mechanical Engineering background.
+//           </h3>
+//           <p className="text-muted">
+//             I am a front-end developer based in Sydney looking for exciting opportunities. Has Mechanical Engineering
+//             background. Likes to focus on accessibility when developing. Passionate and curious about solving problems.
+//             Currently, Iâ€™m exploring Reactjs, Webflow and a bit of Designing. While I am not programming, I enjoy playing
+//             football, photography and playing Valorant. Learning more to improve skill.
+//           </p>
+//           <div className="mt-8">
+//             <LinkArrow href="#contact" icon={null}>Get in touch</LinkArrow>
+//           </div>
+//         </div>
+//       </Container>
+//     </section>
+//   )
+// }
+
+// import { useState } from 'react'
+// import { about } from '../../data/about'
+// import Container from '../ui/Container'
+// import TiltCard from '../ui/TiltCard'
+// // âš  change this path to wherever your scroll-animation file lives
+// import { ScrollCard, ScrollHeadline, ScrollText } from '../ui/ScrollMotion'
+
+// export default function About() {
+//   const { summary, paragraphs, degree, institution } = about
+//   const [logoFailed, setLogoFailed] = useState(false)
+
+//   return (
+//     <section id="about" className="border-b border-line py-20">
+//       <Container className="grid items-center gap-12 lg:grid-cols-[1.5fr_1fr]">
+//         <div>
+//           {/* plain heading: no animation */}
+//           <h2 className="font-display text-5xl font-normal sm:text-6xl">About me</h2>
+
+//           {/* the summary line: each word rises as you scroll, and sinks back when you scroll up */}
+//           <h3 className="mt-7 font-body text-2xl font-medium leading-snug">
+//             <ScrollHeadline text={summary} />
+//           </h3>
+
+//           {/* paragraphs slide in one after another (order = how much later each one starts) */}
+//           {paragraphs.map((text, i) => (
+//             <ScrollText key={text} order={i + 1} className="mt-5">
+//               <p className="text-muted">{text}</p>
+//             </ScrollText>
+//           ))}
+
+//           {degree && (
+//             <ScrollText order={paragraphs.length + 1} className="mt-7">
+//               <p className="text-accent">{degree}</p>
+//             </ScrollText>
+//           )}
+//         </div>
+
+//         {/* university card: rises into place on scroll; keeps the tilt + cursor glow on hover */}
+//         <ScrollCard>
+//           <TiltCard max={5} className="rounded-2xl border border-line bg-card p-8">
+//             <a href={institution.url} target="_blank" rel="noreferrer" className="relative z-10 block">
+//               <div className="rounded-xl bg-white p-5">
+//                 {institution.logo && !logoFailed ? (
+//                   <img
+//                     src={institution.logo}
+//                     alt={`${institution.name} official logo`}
+//                     className="mx-auto h-auto max-h-44 w-full object-contain"
+//                     loading="lazy"
+//                     onError={() => setLogoFailed(true)}
+//                   />
+//                 ) : (
+//                   // shown until the logo file exists
+//                   <p className="py-10 text-center font-body text-xl font-semibold text-black">{institution.name}</p>
+//                 )}
+//               </div>
+//               <p className="mt-6 text-center text-sm text-muted">
+//                 {institution.name}
+//                 {institution.department && (
+//                   <>
+//                     <br />
+//                     {institution.department}
+//                   </>
+//                 )}
+//               </p>
+//             </a>
+//           </TiltCard>
+//         </ScrollCard>
+//       </Container>
+//     </section>
+//   )
+// }
+
+import { useRef, useState, type ReactNode } from "react";
+import { motion, useInView, useReducedMotion } from "motion/react";
+import { about } from "../../data/about";
+import Container from "../ui/Container";
+import TiltCard from "../ui/TiltCard";
+
+/* ---------- one-time reveal helpers (local to this file) ---------- */
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+// once: true -> triggers the first time only; margin -> fires when ~10% inside the viewport
+const VIEW = { once: true, margin: "0px 0px -10% 0px" } as const;
+
+function RevealText({
+  children,
+  className,
+  order = 0,
+}: {
+  children: ReactNode;
+  className?: string;
+  order?: number;
+}) {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, VIEW);
+
+  if (reduce) return <div className={className}>{children}</div>;
+
+  return (
+    <motion.div
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, y: 36 }}
+      animate={inView ? { opacity: 1, y: 0 } : undefined}
+      transition={{ duration: 0.8, ease: EASE, delay: order * 0.12 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function RevealCard({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, VIEW);
+
+  if (reduce) return <div className={className}>{children}</div>;
+
+  return (
+    <motion.div
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, y: 70, scale: 0.94 }}
+      animate={inView ? { opacity: 1, y: 0, scale: 1 } : undefined}
+      transition={{ duration: 0.9, ease: EASE }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function RevealHeadline({ text }: { text: string }) {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, VIEW);
+
+  if (reduce) return <span>{text}</span>;
+
+  const words = text.split(" ");
+  return (
+    <span ref={ref} aria-label={text}>
+      {words.map((word, i) => (
+        <span key={i} aria-hidden="true">
+          <span className="inline-block overflow-hidden pb-[0.15em] -mb-[0.15em] align-bottom">
+            <motion.span
+              className="inline-block"
+              initial={{ y: "110%", opacity: 0 }}
+              animate={inView ? { y: "0%", opacity: 1 } : undefined}
+              transition={{ duration: 0.7, ease: EASE, delay: i * 0.05 }}
+            >
+              {word}
+            </motion.span>
+          </span>
+          {i < words.length - 1 ? " " : ""}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/* ---------- section ---------- */
+
+export default function About() {
+  const { summary, paragraphs, degree, institution } = about;
+  const [logoFailed, setLogoFailed] = useState(false);
+
+  return (
+    <section id="about" className="border-b border-line py-20">
+      <Container className="grid items-center gap-12 lg:grid-cols-[1.5fr_1fr]">
+        <div>
+          {/* plain heading: no animation */}
+          <h2 className="font-display text-5xl font-normal sm:text-6xl">
+            About me
+          </h2>
+
+          {/* summary line: words rise one after another, once */}
+          <h3 className="mt-7 font-body text-2xl font-medium leading-snug">
+            <RevealHeadline text={summary} />
+          </h3>
+
+          {/* paragraphs slide in one after another, once */}
+          {/* {paragraphs.map((text, i) => (
+            <RevealText key={text} order={i + 1} className="mt-5">
+              <p className="text-muted">{text}</p>
+            </RevealText>
+          ))} */}
+          {/* paragraphs slide in one after another, once */}
+          {paragraphs.map((text, i) => (
+            <RevealText key={i} order={i + 1} className="mt-5">
+              <p
+                className="text-muted"
+                dangerouslySetInnerHTML={{ __html: text }}
+              />
+            </RevealText>
+          ))}
+
+          {degree && (
+            <RevealText order={paragraphs.length + 1} className="mt-7">
+              <p className="text-accent">{degree}</p>
+            </RevealText>
+          )}
+        </div>
+
+        {/* university card: rises into place once; keeps the tilt + cursor glow on hover */}
+        <RevealCard>
+          <TiltCard
+            max={5}
+            className="rounded-2xl border border-line bg-card p-8"
+          >
+            <a
+              href={institution.url}
+              target="_blank"
+              rel="noreferrer"
+              className="relative z-10 block"
+            >
+              <div className="rounded-xl bg-white p-5">
+                {institution.logo && !logoFailed ? (
+                  <img
+                    src={institution.logo}
+                    alt={`${institution.name} official logo`}
+                    className="mx-auto h-auto max-h-44 w-full object-contain"
+                    loading="lazy"
+                    onError={() => setLogoFailed(true)}
+                  />
+                ) : (
+                  // shown until the logo file exists
+                  <p className="py-10 text-center font-body text-xl font-semibold text-black">
+                    {institution.name}
+                  </p>
+                )}
+              </div>
+              <p className="mt-6 text-center text-sm text-muted">
+                {institution.name}
+                {institution.department && (
+                  <>
+                    <br />
+                    {institution.department}
+                  </>
+                )}
+              </p>
+            </a>
+          </TiltCard>
+        </RevealCard>
+      </Container>
+    </section>
+  );
+}
+===== vite.config.ts =====
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+    plugins: [react()],
+    server: { host: true },
+    preview: { host: true },
+  })

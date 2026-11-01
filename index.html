@@ -1,23 +1,108 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Tridib Chakraborty – AI ML Englineer</title>
-    <script>
-      // Apply the saved theme before first paint (defaults to dark)
-      (function () {
-        var t;
-        try { t = localStorage.getItem('theme'); } catch (e) {}
-        document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : 'dark');
-      })();
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <!-- Primary SEO -->
+  <title>Tridib Chakraborty | AI/ML Engineer & AI Automation</title>
+
+  <meta name="description"
+    content="Explore the portfolio of Tridib Chakraborty, an AI/ML Engineer focused on machine learning, deep learning, computer vision, NLP, and AI automation." />
+
+  <meta name="keywords"
+    content="Tridib Chakraborty, AI ML Engineer, AI Automation Engineer, Machine Learning, Deep Learning, Data Science, Computer Vision, NLP, Python, PyTorch" />
+
+  <meta name="author" content="Tridib Chakraborty" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#080b12" />
+
+  <!-- Replace with your actual deployed website URL -->
+  <link rel="canonical" href="https://YOUR-LIVE-DOMAIN/" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/logo.png" />
+
+  <!-- Open Graph: Facebook, LinkedIn, etc. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Tridib Chakraborty | AI/ML Engineer" />
+  <meta property="og:description"
+    content="AI/ML Engineer portfolio featuring machine learning, deep learning, computer vision, NLP, research, and AI automation projects." />
+  <meta property="og:url" content="https://YOUR-LIVE-DOMAIN/" />
+  <meta property="og:site_name" content="Tridib Chakraborty Portfolio" />
+  <meta property="og:image" content="https://YOUR-LIVE-DOMAIN/images/portrait.png" />
+  <meta property="og:image:alt" content="Tridib Chakraborty - AI/ML Engineer" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Tridib Chakraborty | AI/ML Engineer" />
+  <meta name="twitter:description" content="Explore AI/ML projects, research, machine learning, and AI automation." />
+  <meta name="twitter:image" content="https://YOUR-LIVE-DOMAIN/images/portrait.png" />
+
+  <!-- Structured Data: Person -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Tridib Chakraborty",
+        "url": "https://YOUR-LIVE-DOMAIN/",
+        "image": "https://YOUR-LIVE-DOMAIN/images/portrait.png",
+        "jobTitle": "AI/ML Engineer",
+        "description": "Computer Science and Engineering graduate specializing in Data Science, AI/ML engineering, and AI automation.",
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "East West University"
+        },
+        "knowsAbout": [
+          "Artificial Intelligence",
+          "Machine Learning",
+          "Deep Learning",
+          "Data Science",
+          "Natural Language Processing",
+          "Computer Vision",
+          "AI Automation",
+          "Python",
+          "PyTorch"
+        ],
+        "sameAs": [
+          "https://github.com/imtridib",
+          "https://linkedin.com/in/tridib-chakraborty-ewu-thk",
+          "https://kaggle.com/imtridib"
+        ]
+      }
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+  <!-- Apply saved theme before first paint -->
+  <script>
+    (function () {
+      var t;
+      try {
+        t = localStorage.getItem("theme");
+      } catch (e) { }
+
+      document.documentElement.setAttribute(
+        "data-theme",
+        t === "light" ? "light" : "dark"
+      );
+    })();
+  </script>
+
+  <!-- Font optimization -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@500&family=Manrope:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Preload the hero portrait -->
+  <link rel="preload" as="image" href="/images/portrait.png" fetchpriority="high" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
