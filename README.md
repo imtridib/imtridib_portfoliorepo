@@ -1,4 +1,4 @@
-# Robert Garcia – Portfolio
+# Tridib Chakraborty – Portfolio
 
 React + TypeScript + Tailwind CSS (v3) + Vite.
 
