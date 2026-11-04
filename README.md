@@ -108,4 +108,4 @@ src/
 
 ## 📄 License
 
-© 2025 Tridib Chakraborty. All rights reserved.
+© 2026 Tridib Chakraborty. All rights reserved.
