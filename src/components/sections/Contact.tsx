@@ -103,13 +103,13 @@ function TypewriterParagraph({ text, className }: { text: string; className?: st
 const contactLinks = [
   {
     title: 'Email',
-    description: 'Send me an email',
+    description: 'tridib.ewu.bd@gmail.com\nSend me an email',
     href: 'mailto:tridib.ewu.bd@gmail.com',
     icon: Mail,
   },
   {
     title: 'WhatsApp',
-    description: 'Start a conversation',
+    description: '+880 1774-385509\nStart a conversation',
     href: 'https://wa.me/8801774385509',
     icon: MessageCircle,
   },
@@ -187,7 +187,7 @@ export default function Contact() {
                             <span className="ml-1.5 text-base">↗</span>
                           </h3>
 
-                          <p className="font-body text-sm leading-relaxed text-muted sm:text-base">
+                          <p className="whitespace-pre-line font-body text-sm leading-relaxed text-muted sm:text-base">
                             {item.description}
                           </p>
                         </div>
