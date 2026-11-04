@@ -15,6 +15,8 @@ export default function SocialLinks({ round = false, size = 32, only, className 
         <a
           key={label}
           href={href}
+          target="_blank"
+          rel="noopener noreferrer"
           aria-label={label}
           className={`hover:opacity-75 ${round ? 'grid h-[54px] w-[54px] place-items-center rounded-full bg-tile' : ''}`}
         >
