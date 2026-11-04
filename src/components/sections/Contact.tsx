@@ -104,13 +104,13 @@ const contactLinks = [
   {
     title: 'Email',
     description: 'Send me an email',
-    href: 'mailto:YOUR_EMAIL@example.com',
+    href: 'mailto:tridib.ewu.bd@gmail.com',
     icon: Mail,
   },
   {
     title: 'WhatsApp',
     description: 'Start a conversation',
-    href: 'https://wa.me/YOUR_PHONE_NUMBER',
+    href: 'https://wa.me/8801774385509',
     icon: MessageCircle,
   },
   ...socials
