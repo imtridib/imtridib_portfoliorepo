@@ -203,7 +203,7 @@ export default function Contact() {
         </div>
 
         {/* Footer */}
-        <div className="mt-20 border-t border-line pt-6 text-center">
+        <div className="mt-6">
           <p className="font-body text-sm text-muted">
             © 2026 Tridib Chakraborty.
           </p>
