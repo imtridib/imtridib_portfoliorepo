@@ -61,23 +61,6 @@ export default function ProjectCard({ project, reverse = false }: Props) {
     setLightboxVisible(false);
     window.setTimeout(() => setImageExpanded(false), 300);
   };
-
-  // useEffect(() => {
-  //   if (!imageExpanded) return
-
-  //   const handleKeyDown = (event: KeyboardEvent) => {
-  //     if (event.key === 'Escape') closeLightbox()
-  //   }
-
-  //   window.addEventListener('keydown', handleKeyDown)
-  //   document.body.style.overflow = 'hidden'
-
-  //   return () => {
-  //     window.removeEventListener('keydown', handleKeyDown)
-  //     document.body.style.overflow = ''
-  //   }
-  // }, [imageExpanded])
-
   // improvised
   useEffect(() => {
     if (!imageExpanded) return;
@@ -134,7 +117,7 @@ export default function ProjectCard({ project, reverse = false }: Props) {
                 </ScrollText>
               )}
 
-              <div className="group relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-card">
+              <div className="group relative aspect-video w-full overflow-hidden rounded-xl bg-card">
                 {activeMedia?.type === "youtube" ? (
                   <iframe
                     src={getYouTubeEmbedUrl(activeMedia.src)}
@@ -145,7 +128,7 @@ export default function ProjectCard({ project, reverse = false }: Props) {
                     allowFullScreen
                   />
                 ) : activeMedia ? (
-                  <ScrollImage className="absolute inset-0">
+                  <ScrollImage className="absolute inset-0" parallax={false}>
                     <button
                       type="button"
                       onClick={openLightbox}
@@ -156,7 +139,7 @@ export default function ProjectCard({ project, reverse = false }: Props) {
                         src={activeMedia.src}
                         alt={activeMedia.alt}
                         loading="lazy"
-                        className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                       />
                     </button>
                   </ScrollImage>
@@ -236,11 +219,8 @@ export default function ProjectCard({ project, reverse = false }: Props) {
             </ScrollText>
           </div>
 
-          {/* <ScrollText order={2}> */}
             <InfoList items={info} stack={stack} />
-          {/* </ScrollText> */}
 
-          {/* <ScrollText order={3}> */}
             <div className="flex flex-wrap gap-6">
               {liveUrl && <LinkArrow href={liveUrl}>View project</LinkArrow>}
               {codeUrl && (
@@ -254,12 +234,9 @@ export default function ProjectCard({ project, reverse = false }: Props) {
                 </LinkArrow>
               )}
             </div>
-          {/* </ScrollText> */}
         </div>
       </article>
 
-      {/* Full-size image lightbox. Portaled to <body> so the card's reveal transform/filter
-          can't turn `position: fixed` into "fixed relative to the card". */}
       {imageExpanded &&
         activeMedia?.type === "image" &&
         createPortal(

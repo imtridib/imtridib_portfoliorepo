@@ -23,11 +23,7 @@ interface RevealProps extends Omit<HTMLMotionProps<'div'>, 'children' | 'transit
   duration?: number
 }
 
-/**
- * Scroll-triggered fade-up + slight scale + blur-to-clear.
- * Pattern from Magic UI's BlurFade, extended with scale and a custom ease.
- * Respects prefers-reduced-motion.
- */
+
 export function Reveal({
   children,
   className,
@@ -60,10 +56,7 @@ export function RevealText({ y = 22, duration = 0.7, ...props }: RevealProps) {
   return <Reveal y={y} scale={1} blur={0} duration={duration} {...props} />
 }
 
-/**
- * Image reveal: the frame wipes open from top to bottom while the image
- * inside settles from a slight zoom. Give the parent `overflow-hidden`.
- */
+
 export function ImageReveal({
   children,
   className,
@@ -101,10 +94,7 @@ export function ImageReveal({
   )
 }
 
-/**
- * Headline reveal: every word rises out of its own mask, one after another.
- * Use it inside an <h2>/<h3>; pass the title as plain text.
- */
+
 export function HeadlineReveal({
   text,
   className,

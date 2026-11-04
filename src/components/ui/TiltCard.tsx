@@ -5,14 +5,12 @@ interface Props {
   className?: string
   /** maximum tilt in degrees. 0 = no tilt (hover lift and cursor glow only) */
   max?: number
+  /** false = no cursor-following glow (the soft spotlight + the bright edge). Lift and tilt still work. */
+  glow?: boolean
 }
 
-/**
- * A card that lifts on hover, tilts towards the mouse and shows a glow that follows the cursor
- * (a soft spotlight inside + a bright edge). The visuals live in index.css (.tilt-card).
- * Mouse only: touch screens and reduced-motion users get a plain card.
- */
-export default function TiltCard({ children, className = '', max = 8 }: Props) {
+
+export default function TiltCard({ children, className = '', max = 8, glow = true }: Props) {
   const ref = useRef<HTMLDivElement>(null)
 
   const onMove = (e: PointerEvent<HTMLDivElement>) => {
@@ -21,8 +19,10 @@ export default function TiltCard({ children, className = '', max = 8 }: Props) {
     const r = el.getBoundingClientRect()
     const x = e.clientX - r.left
     const y = e.clientY - r.top
-    el.style.setProperty('--mx', `${x}px`) // where the glow sits
-    el.style.setProperty('--my', `${y}px`)
+    if (glow) {
+      el.style.setProperty('--mx', `${x}px`) // where the glow sits
+      el.style.setProperty('--my', `${y}px`)
+    }
     if (max > 0 && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
       el.style.setProperty('--ry', `${(x / r.width - 0.5) * 2 * max}deg`)
       el.style.setProperty('--rx', `${(0.5 - y / r.height) * 2 * max}deg`)
@@ -50,8 +50,12 @@ export default function TiltCard({ children, className = '', max = 8 }: Props) {
       className={`tilt-card ${className}`}
     >
       {children}
-      <span className="tilt-glow" aria-hidden="true" />
-      <span className="tilt-ring" aria-hidden="true" />
+      {glow && (
+        <>
+          <span className="tilt-glow" aria-hidden="true" />
+          <span className="tilt-ring" aria-hidden="true" />
+        </>
+      )}
     </div>
   )
 }

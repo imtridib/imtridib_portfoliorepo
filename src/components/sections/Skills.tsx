@@ -16,9 +16,7 @@ const MOBILE_GROUPS = 2
 const GLOW = 'shadow-[0_0_20px_color-mix(in_srgb,var(--accent)_45%,transparent)]'
 const HOVER = '[@media(hover:hover)]:hover'
 
-/**
- * One skill: a fixed-size card (same width and height as all the others). Touching it lights it up for a moment, a mouse gets the same on hover.
- */
+
 function SkillChip({ name, Icon }: { name: string; Icon: SkillIcon }) {
   const [lit, setLit] = useState(false)
   const timer = useRef<number | undefined>(undefined)

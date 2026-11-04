@@ -10,11 +10,7 @@ interface Props {
   className?: string
 }
 
-/**
- * A fine grid behind the page. Cells light up where the pointer passes and fade out a moment later.
- * Colours come from the theme variables (--accent, --line), so dark and light mode work automatically.
- * It only does work while cells are glowing, so an idle page costs nothing.
- */
+
 export default function GridPulse({ cell = 6, radius = 110, fadeMs = 900, className = '' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 

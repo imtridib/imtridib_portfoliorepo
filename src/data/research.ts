@@ -1,18 +1,3 @@
-
-
-// Add a paper = add one object to this list. Both layouts (desktop cards, mobile list) read from here.
-// Anything you don't know stays null (or []), and empty fields are simply hidden.
-// Please don't guess DOIs, years or author names.
-//
-// Thumbnails: put images in /public/images/research and point to them like '/images/research/paper-1.png'.
-// A missing image just shows a neutral placeholder.
-
-
-
-
-
-
-
 import type { ResearchPaper } from '../types'
 
 export const research: ResearchPaper[] = [

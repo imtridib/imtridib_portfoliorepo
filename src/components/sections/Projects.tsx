@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Calendar, Clock, ArrowUpDown } from "lucide-react";
 import { projects } from "../../data/projects";
+import { sortProjects, type SortMode } from "../../lib/projectDates";
 import { ChevronDownIcon, GridIcon, ListIcon } from "../../icons";
 import type { Project, ProjectCategory } from "../../types";
 import Container from "../ui/Container";
@@ -11,7 +12,7 @@ import { ScrollCard, ScrollText } from "../ui/ScrollMotion";
 
 type View = "list" | "grid";
 type Filter = "all" | ProjectCategory;
-type Sort = "latest" | "oldest";
+type Sort = SortMode; // 'priority' | 'latest' | 'oldest'
 
 // The text navbar under the heading. Delete the 'all' line if you only want the three category tabs.
 const FILTERS: { id: Filter; label: string }[] = [
@@ -23,13 +24,6 @@ const FILTERS: { id: Filter; label: string }[] = [
 
 // How many projects show before "See more"
 const LIMIT: Record<View, number> = { list: 3, grid: 3 };
-
-// Reads the "Year" entry from a project's info list. 0 = no year found (those projects always sort last)
-const getYear = (p: Project) => {
-  const raw = p.info?.find((i) => i.label === "Year")?.value;
-  const year = parseInt(raw ?? "", 10);
-  return Number.isNaN(year) ? 0 : year;
-};
 
 function ViewToggle({
   view,
@@ -208,7 +202,7 @@ function FilterDropdown({
   );
 }
 
-/** Sort bar: [sort icon | Latest | Oldest]. Sorts the projects by their year. */
+/** Sort bar: [sort icon | Latest | Oldest]. While the page is in its first "project number" order, neither is highlighted. */
 function SortBar({
   sort,
   onChange,
@@ -254,10 +248,6 @@ function SortBar({
     </div>
   );
 }
-
-// Which layout to start with. A computer-sized screen (1024px and up, the same breakpoint as the desktop tabs)
-// starts in List; tablets and phones start in Grid. This is read once, when the page loads, so after that the
-// visitor's own choice is never overridden (not even if they resize the window or rotate the device).
 const initialView = (): View =>
   typeof window === "undefined" ||
   window.matchMedia("(min-width: 1024px)").matches
@@ -266,26 +256,20 @@ const initialView = (): View =>
 
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
-  // const [view, setView] = useState<View>('list')
   const [view, setView] = useState<View>(initialView);
   const [filter, setFilter] = useState<Filter>("all");
-  const [sort, setSort] = useState<Sort>("latest");
+  // First look = your own project numbers ('priority'). It switches to 'latest' on the first category click.
+  const [sort, setSort] = useState<Sort>("priority");
   const [expanded, setExpanded] = useState(false);
   const [selected, setSelected] = useState<{
     project: Project;
     rect: DOMRect;
   } | null>(null);
 
-  // 1) filter by category, 2) sort by year (stable: same-year projects keep their order from projects.ts;
-  //    projects with no year always go last)
+  // filter first, then sort (the sorting rules live in lib/projectDates.ts)
   const byCategory =
     filter === "all" ? projects : projects.filter((p) => p.category === filter);
-  const filtered = [...byCategory].sort((a, b) => {
-    const ya = getYear(a);
-    const yb = getYear(b);
-    if (!ya || !yb) return !ya && !yb ? 0 : !ya ? 1 : -1;
-    return sort === "latest" ? yb - ya : ya - yb;
-  });
+  const filtered = sortProjects(byCategory, sort);
   const limit = LIMIT[view];
   const visible = expanded ? filtered : filtered.slice(0, limit);
   const canExpand = filtered.length > limit;
@@ -296,7 +280,9 @@ export default function Projects() {
     setExpanded(false);
   };
   const changeFilter = (f: Filter) => {
+    if (f === filter) return; // clicking the tab you are already on does nothing
     setFilter(f);
+    setSort((s) => (s === "priority" ? "latest" : s)); // leave the project-number order, newest first
     setExpanded(false);
   };
   const changeSort = (s: Sort) => {

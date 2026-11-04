@@ -1,26 +1,3 @@
-// import TopBar from './components/layout/TopBar'
-// import Dock from './components/layout/Dock/Dock'
-// import Hero from './components/sections/Hero'
-// import Projects from './components/sections/Projects'
-// import Research from './components/sections/Research'
-// import About from './components/sections/About'
-// import Contact from './components/sections/Contact'
-
-// export default function App() {
-//   return (
-//     <>
-//       <TopBar />
-//       <main>
-//         <Hero />
-//         <Projects />
-//         <Research />
-//         <About />
-//         <Contact />
-//       </main>
-//       <Dock />
-//     </>
-//   )
-// }
 import Skills from "./components/sections/Skills";
 import { useState } from "react";
 import TopBar from "./components/layout/TopBar";
@@ -31,9 +8,6 @@ import Projects from "./components/sections/Projects";
 import Research from "./components/sections/Research";
 import About from "./components/sections/About";
 import Contact from "./components/sections/Contact";
-// import TubesCursor from "./components/ui/TubesCursor";
-// import ShaderBackground from "./components/ui/ShaderBackground";
-// import GridPulse from "./components/ui/GridPulse";
 import SpringCursor from "./components/ui/SpringCursor";
 // import Aurora from './components/ui/Aurora'
 

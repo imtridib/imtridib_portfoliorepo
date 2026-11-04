@@ -9,7 +9,7 @@ export default function ResearchRow({ paper }: { paper: ResearchPaper }) {
 
   return (
     <article className="group flex gap-4 border-t border-line py-5">
-      <ResearchThumb paper={paper} className="aspect-[4/3] w-24 shrink-0 self-start rounded-lg" />
+      <ResearchThumb paper={paper} className="aspect-video w-28 shrink-0 self-start rounded-lg" />
 
       <div className="min-w-0 flex-1">
         <p className="font-ui text-xs font-medium uppercase tracking-wide text-accent">{meta}</p>

@@ -63,97 +63,9 @@
   }
 }
 
-/* ---------- Dock ----------
-   The bar never changes size. useDockMagnify only sets two CSS variables:
-   --s  (icon scale)  and  --tx  (horizontal push so neighbours never touch). */
-/* 1st draft */
-/* 
-.dock-wrap {
-      position: fixed; left: 0; right: 0;
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
-      display: flex; justify-content: center;
-      pointer-events: none; z-index: 1000;
-    }
-    .dock {
-      --size: 58px;
-      --gap: 14px;
-      pointer-events: auto;
-      box-sizing: border-box;
-      display: flex; align-items: flex-end; gap: var(--gap);
-      height: calc(var(--size) + 24px);   /* fixed bar height: icons rise above it */ /*
-      padding: 12px 30px;                 /* side room so pushed icons stay inside the bar */ /*
-      border-radius: 28px;
-      background: var(--dock-bg);
-      border: 1px solid var(--dock-border);
-      box-shadow: var(--dock-shadow);
-      -webkit-backdrop-filter: blur(22px) saturate(160%);
-      backdrop-filter: blur(22px) saturate(160%);
-      max-width: calc(100vw - 16px);
-    }
-    .dock-sep {
-      flex: none; width: 1px; height: calc(var(--size) * 0.7);
-      align-self: center; background: var(--dock-border);
-      transform: translateX(var(--tx, 0px));
-    }
-  
-    /* Slot: fixed size in the layout, only pushed sideways with a transform */ /**
-    .dock-item {
-      position: relative; flex: none; display: block;
-      width: var(--size); height: var(--size);
-      padding: 0; border: 0; background: none; font: inherit;
-      color: var(--accent); cursor: pointer;
-      -webkit-appearance: none; appearance: none;
-      transform: translateX(var(--tx, 0px));
-    }
-    /* Icon: scales up from its bottom edge, so it rises above the bar */ /*
-    .dock-icon {
-      position: absolute; inset: 0;
-      display: grid; place-items: center;
-      border-radius: 15px;
-      background: var(--tile);
-      border: 1px solid var(--dock-border);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
-      transform: scale(var(--s, 1));
-      transform-origin: 50% 100%;
-      transition: background 0.2s, color 0.2s;
-    }
-    .dock-icon svg { width: 50%; height: 50%; }
-    .dock-item:focus-visible { outline: none; }
-    .dock-item:focus-visible .dock-icon { outline: 2px solid var(--accent); outline-offset: 3px; }
-    .dock-item.active .dock-icon { background: var(--primary); color: var(--ink); }
-  
-    /* Active dot, like the real Dock */ /*
-    .dock-item::after {
-      content: ""; position: absolute; left: 50%; bottom: -9px;
-      width: 4px; height: 4px; border-radius: 50%;
-      background: var(--fg); transform: translateX(-50%);
-      opacity: 0; transition: opacity 0.2s;
-    }
-    .dock-item.active::after { opacity: 0.85; }
-  
-    /* Tooltip rides above the scaled icon */ /*
-    .dock-item::before {
-      content: attr(data-label);
-      position: absolute; left: 50%;
-      bottom: calc(var(--size) * var(--s, 1) + 14px);
-      transform: translateX(-50%);
-      padding: 5px 12px; border-radius: 8px;
-      font: 500 14px/1.4 Inter, system-ui, sans-serif; white-space: nowrap;
-      color: var(--fg); background: var(--tip-bg); border: 1px solid var(--line);
-      opacity: 0; pointer-events: none; transition: opacity 0.15s;
-    }
-    .dock-item:hover::before,
-    .dock-item:focus-visible::before { opacity: 1; }
-  
-    @media (max-width: 520px) {
-      .dock { --size: 40px; --gap: 6px; padding: 8px 12px; border-radius: 22px; height: calc(var(--size) + 16px); }
-      .dock-icon { border-radius: 11px; }
-      .dock-item::before { display: none; }
-    }
-  }
-  
 
-   /* improvised */
+/* 1st draft */
+      
 @layer components {
   .dock-wrap {
     position: fixed;
@@ -331,16 +243,7 @@
     .dock-sep {
       display: none;
     }
-    /* .dock-icon {
-      border-radius: calc(var(--size) * 0.3);
-      transition:
-        transform 0.15s ease,
-        background 0.2s,
-        color 0.2s;
-    }
-    .dock-item:active .dock-icon {
-      transform: scale(0.92);
-    } tap feedback */
+    
 
     .dock-icon {
       border-radius: calc(var(--size) * 0.3);
